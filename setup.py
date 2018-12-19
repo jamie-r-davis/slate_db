@@ -16,6 +16,6 @@ setup(
     author_email="jamjam@umich.edu",
     license="MIT",
     packages=["slate_db"],
-    install_requires=['pyodbc'],
+    install_requires=['attrdict', 'pyodbc'],
     include_package_date=True,
     zip_safe=False)
