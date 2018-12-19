@@ -10,7 +10,7 @@ pip install git+https://github.com/jamie-r-davis/slate_db
 ```
 
 ## Usage
-The `SlateDB.select` method returns a generator which will yield any records that match your `sql` query. By default, each record is returned as a native `pyodbc` row, so columns can be accessed as attributes:
+The `SlateDB.select` method returns a generator which will yield any records that match your `sql` query. By default, each record is returned as an AttrDict, enabling access via keys or via attributes:
 
 ```python
 >>> from slate_db import SlateDB
@@ -19,28 +19,14 @@ The `SlateDB.select` method returns a generator which will yield any records tha
                  db='dbname-test',
                  username='user',
                  password='secret-password')
-             
+
 # select all records with last name "Smith"
 >>> sql = """select * from person where last = 'Smith'"""
 >>> for record in db.select(sql):
->>>     print("{} <{}>".format(record.name, record.email))
-# Smith, John <john.smith@example.com>
-# Smith, Granny <granny.smith@example.com> 
-```
-
-Rows can also be returned as dicts with the `as_dict` parameter:
-
-```python
->>> list(db.select(sql, as_dict=True))
-# [
-#   {
-#     "name": "Smith, Granny",
-#     "email": "granny.smith@example.com
-#   },
-#   {
-#     "name": "Smith, John",
-#     "email": "john.smith@example.com
-#   },
-#   ...
-# ]
+>>>     print("Via attribute: {} <{}>".format(record.name, record.email))
+>>>     print("Via key: {} <{}>".format(record['name'], record['email']])
+# Via attribute: Smith, John <john.smith@example.com>
+# Via key: Smith, John <john.smith@example.com>
+# Via attribute: Smith, Granny <granny.smith@example.com>
+# Via key: Smith, Granny <granny.smith@example.com> 
 ```
