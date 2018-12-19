@@ -17,7 +17,8 @@ class SlateDB:
         self._conn_parms = parms = {'driver': self._driver,
                                     'server': self._host,
                                     'uid': self._username,
-                                    'pwd': self._password}
+                                    'pwd': self._password,
+                                    'database': self._db}
 
     def select(self, sql: str, binds: tuple = None, max_rows: int or None = None, as_dict: bool = False):
         """
