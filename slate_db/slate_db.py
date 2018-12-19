@@ -89,3 +89,7 @@ class SlateDB:
     @staticmethod
     def _todict(row):
         return dict(zip([x[0] for x in row.cursor_description], row))
+
+    def cursor(self):
+        with pyodbc.connect(**self._conn_parms) as db:
+            return db.cursor()
