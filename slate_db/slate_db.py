@@ -21,7 +21,10 @@ class SlateDB:
                                     'pwd': self._password,
                                     'database': self._db}
 
-    def select(self, sql: str, binds: tuple = None, max_rows: int or None = None, as_dict: bool = False):
+    def select(self,
+               sql: str,
+               binds: tuple = None,
+               max_rows: int or None = None):
         """
         Execute the given select sql.
 
@@ -32,9 +35,11 @@ class SlateDB:
         binds : tuple
             A tuple of any bind variables to use in the prepared sql.
         max_rows : int or None
-            The maximum number of rows to retrieve. If none, all rows will be returned.
+            The maximum number of rows to retrieve. If none, all rows
+            will be returned.
         as_dict : bool
-            If True, results will be returned as dicts. Otherwise they will be returned as pyodbc rows.
+            If True, results will be returned as dicts. Otherwise they
+            will be returned as pyodbc rows.
 
         Yields
         -------
@@ -73,20 +78,15 @@ class SlateDB:
                             break
                         else:
                             i += 1
-                            if as_dict:
-                                yield self._todict(results[0])
-                            else:
-                                yield results[0]
+                            yield self._todict(results[0])
                 else:
                     while True:
                         results = c.fetchmany(1)
                         if not results:
                             break
                         else:
-                            if as_dict:
-                                yield self._todict(results[0])
-                            else:
-                                yield results[0]
+                            yield self._todict(results[0])
+
     @staticmethod
     def _todict(row):
         return AttrDict(dict(zip([x[0] for x in row.cursor_description], row)))
