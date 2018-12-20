@@ -8,7 +8,7 @@ def readme():
 
 setup(
     name="slate_db",
-    version="0.1",
+    version="0.1.1",
     description="Wrapper for working with Slate databases.",
     long_description=readme(),
     url="https://github.com/jamie-r-davis/slate_db",

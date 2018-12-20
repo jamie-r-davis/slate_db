@@ -37,14 +37,11 @@ class SlateDB:
         max_rows : int or None
             The maximum number of rows to retrieve. If none, all rows
             will be returned.
-        as_dict : bool
-            If True, results will be returned as dicts. Otherwise they
-            will be returned as pyodbc rows.
 
         Yields
         -------
         results : generator
-            A generator of results as either a native pyodbc Row or as a dict.
+            A generator of results as AttrDicts.
 
         Examples
         --------
@@ -59,8 +56,8 @@ class SlateDB:
         # yield first 10 rows matching "Your Name"
         >>> list(db.select("select * from person where last = ?", ("Smith",), as_dict=True))
         [
-            {"id": "123456", "last": "Smith", "first": "John", ...},
-            {"id": "15484", "last": "Smith", "first": "Bob", ...},
+            AttrDict({"id": "123456", "last": "Smith", "first": "John", ...}),
+            AttrDict({"id": "15484", "last": "Smith", "first": "Bob", ...}),
             ...
         ]
         """
@@ -89,7 +86,8 @@ class SlateDB:
 
     @staticmethod
     def _todict(row):
-        return AttrDict(dict(zip([x[0] for x in row.cursor_description], row)))
+        return AttrDict(
+            dict(zip([x[0].lower() for x in row.cursor_description], row)))
 
     def cursor(self):
         with pyodbc.connect(**self._conn_parms) as db:
